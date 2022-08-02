@@ -3,6 +3,8 @@ package App;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import App.utill.Myutill;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -40,13 +42,37 @@ public class Main {
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
 				
-				articles.add(new Article(id, title, body));
+				articles.add(new Article(id, title, body, Myutill.regDate));
 				
 				System.out.printf("%d번글이 생성되었습니다\n", id);
 				
 				id++;
 				
-			} else if(input.equals("exit")) {
+			} else if(input.startsWith("article detail ")) {
+				String[] arr = input.split(" ");
+				int num = Integer.parseInt(arr[2]);
+				
+				Article article = null;
+				
+				for(int i = 0; i < articles.size(); i++) {
+					if(num - 1 == i) {
+						article = articles.get(i);
+						break;
+					} 
+				}
+				
+				if(article == null) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.", num);
+					break;
+				}
+				
+				System.out.printf("번호 : %d\n", article.id);
+				System.out.printf("날짜 : %s\n", article.regDate);
+				System.out.printf("제목 : %s\n", article.title);
+				System.out.printf("내용 : %s\n", article.body);
+				
+			}
+				else if(input.equals("exit")) {
 				break;
 			} 
 			  else {
