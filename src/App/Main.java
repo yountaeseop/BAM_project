@@ -12,7 +12,7 @@ public class Main {
 		ArrayList<Article> articles = new ArrayList<>();
 		Scanner sc = new Scanner(System.in);
 		System.out.println("==프로그램 시작==");
-		int id = 1;
+		int lastArticleId = 0;
 		
 		while(true) {
 			System.out.printf("명령어) ");
@@ -21,9 +21,7 @@ public class Main {
 			if(input.equals("article list")) {
 				System.out.printf("번호  /  제목\n");
 				
-				
-				
-				for(int i = 0; i < articles.size(); i++) {
+				for(int i = articles.size()-1; i >= 0 ; i--) {
 					int articleId = articles.get(i).id;
 					String articleTitle = articles.get(i).title;
 					
@@ -36,6 +34,8 @@ public class Main {
 				}
 				
 			} else if(input.equals("article write")) {
+				int id = lastArticleId + 1;
+				lastArticleId = id;
 				
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
@@ -52,9 +52,10 @@ public class Main {
 				String[] arr = input.split(" ");
 				int num = Integer.parseInt(arr[2]);
 				
+				
 				Article article = null;
 				
-				for(int i = 0; i < articles.size(); i++) {
+				for (int i = 0; i < articles.size(); i++) {
 					if(num - 1 == i) {
 						article = articles.get(i);
 						break;
@@ -71,8 +72,32 @@ public class Main {
 				System.out.printf("제목 : %s\n", article.title);
 				System.out.printf("내용 : %s\n", article.body);
 				
+			} else if(input.startsWith("article delete ")) {
+				String[] arr = input.split(" ");
+				int id = Integer.parseInt(arr[2]);
+				
+				int foundIndex = -1;
+
+				for(int i = 0; i < articles.size(); i++) {
+					Article article = articles.get(i);
+					
+					if(article.id == id) {
+						foundIndex = i;
+						break;
+					} 
+				}
+				
+				if(foundIndex == -1) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+					continue;
+				}
+				
+				articles.remove(foundIndex);
+				System.out.printf("%d번 게시물을 삭제했습니다.\n", id);
+//				break문은 조건문도 빠져나가면서 반복문 자체도 탈출하고 끝이나지만
+//				continue문은 해당 '조건문만' 실행하지 않고, 반복문은 이어서 실행하는 제어문이다.
 			}
-				else if(input.equals("exit")) {
+			else if(input.equals("exit")) {
 				break;
 			} 
 			  else {
@@ -80,7 +105,6 @@ public class Main {
 			}
 			
 		}
-		
 		
 		
 		System.out.println("==프로그램 종료==");
