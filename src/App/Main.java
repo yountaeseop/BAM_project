@@ -13,18 +13,19 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("==프로그램 시작==");
 		int lastArticleId = 0;
+		int hit = 0;
 		
 		while(true) {
 			System.out.printf("명령어) ");
 			String input = sc.nextLine().trim();
 			
 			if(input.equals("article list")) {
-				System.out.printf("번호   |           작성일          |  제목\n");
+				
+					System.out.printf("번호   |           작성일          |  제목  |  조회수  |\n");
 				
 				for(int i = articles.size()-1; i >= 0 ; i--) {
 					Article article = articles.get(i);
-					System.out.printf("%4d  |    %10s  |%4s\n", article.id, article.regDate, article.title);
-					
+					System.out.printf("%4d  |    %10s  |%4s  |%6d  |\n", article.id, article.regDate, article.title, article.hit);
 				}
 				
 				if(articles.size() == 0) {
@@ -40,7 +41,7 @@ public class Main {
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
 				
-				articles.add(new Article(id, title, body, Myutill.regDate));
+				articles.add(new Article(id, title, body, Myutill.regDate, hit));
 				
 				System.out.printf("%d번글이 생성되었습니다\n", id);
 				
@@ -67,11 +68,13 @@ public class Main {
 				}
 				
 				Article article = articles.get(foundIndex);
+				article.hit++;
 				
 				System.out.printf("번호 : %d\n", article.id);
 				System.out.printf("날짜 : %s\n", article.regDate);
 				System.out.printf("제목 : %s\n", article.title);
 				System.out.printf("내용 : %s\n", article.body);
+				System.out.printf("조회수 : %d\n", article.hit);
 				
 			} else if(input.startsWith("article delete ")) {
 				String[] arr = input.split(" ");
