@@ -62,13 +62,12 @@ public class App {
 						System.out.printf("%4d   |    %10s  |%4s  |%6d  |\n", article.id, article.regDate, article.title, article.hit);
 					}
 					
-					
 				} 
 				 else if(input.startsWith("article detail ")) {
 					String[] arr = input.split(" ");
 					int id = Integer.parseInt(arr[2]);
 					
-					Article foundArticle = null;
+					Article foundArticle = getArticleById(id);
 
 					for(int i = 0; i < articles.size(); i++) {
 						Article article = articles.get(i);
@@ -97,16 +96,7 @@ public class App {
 						String[] arr = input.split(" ");
 						int id = Integer.parseInt(arr[2]);
 						
-						Article foundArticle = null;
-						
-						for(int i = 0; i < articles.size(); i++) {
-							Article article = articles.get(i);
-							
-							if(article.id == id) {
-								foundArticle = article;
-								break;
-							} 
-						}
+						Article foundArticle = getArticleById(id);
 						
 						if(foundArticle == null) {
 							System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
@@ -128,16 +118,7 @@ public class App {
 					String[] arr = input.split(" ");
 					int id = Integer.parseInt(arr[2]);
 					
-					int foundIndex = -1;
-
-					for(int i = 0; i < articles.size(); i++) {
-						Article article = articles.get(i);
-						
-						if(article.id == id) {
-							foundIndex = i;
-							break;
-						} 
-					}
+					int foundIndex = getArticleIndexById(id);
 					
 					if(foundIndex == -1) {
 						System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
@@ -160,6 +141,49 @@ public class App {
 			
 		}
 
+	private int getArticleIndexById(int id) {
+//		for(int i = 0; i < articles.size(); i++) {
+//			Article article = articles.get(i);
+//			
+//			if(article.id == id) {
+//				return i;
+//			} 
+//		}
+		int i = 0;
+		for(Article article : articles) {
+			if(article.id == id) {
+				return i;
+			}
+			i++;
+		}
+		return -1;
+	}
+
+	private Article getArticleById(int id) {
+// 	   ==v3==
+		int index = getArticleIndexById(id);
+		
+		if(index != -1) {
+			return articles.get(index);
+		}
+//     ==v1==		
+//		for(int i = 0; i < articles.size(); i++) {
+//			Article article = articles.get(i);
+//			
+//			if(article.id == id) {
+//				return article;
+//			} 
+//		}
+//	   ==v2==		
+//		for(Article article : articles) {
+//			if(article.id == id) {
+//				return article;
+//			} 
+//		}
+		
+		return null;
+	}
+
 	private void makeTestData() {
 		System.out.println("테스트를 위한 게시물 데이터를 생성합니다.");
 		articles.add(new Article("test1", "aa", Myutill.regDate, 1));
@@ -167,5 +191,4 @@ public class App {
 		articles.add(new Article("test3", "cc", Myutill.regDate, 3));
 
 	}
-
 }
