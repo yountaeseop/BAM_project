@@ -48,16 +48,36 @@ public class App {
 					System.out.printf("%d번글이 생성되었습니다\n", article.id);
 					
 				}
-				else if(input.equals("article list")) {
+				else if(input.startsWith("article list")) {
 					
 					if(articles.size() == 0) {
 						System.out.println("게시글이 없습니다");
 						continue; // 이번 반복패턴 지나가고 다음 반복 패턴으로 넘기기.
 					}
 					
+					String searchKeyword = input.substring("article list ".length());
+					// substring(시작위치), substring(시작위치, 끝위치)
+					
+					List<Article> forPrintArticles = articles;
+					
+					if(searchKeyword.length() > 0) {
+						forPrintArticles = new ArrayList<>();
+						
+						for (Article article : articles) {
+							if(article.title.contains(searchKeyword)) {
+								forPrintArticles.add(article);  
+							}
+						}
+						
+						if(forPrintArticles.size() == 0) {
+							System.out.println("검색 결과가 없습니다");
+							continue;
+						}
+					}
+					
 					System.out.printf("  번호  |           작성일          |  제목  |  조회수  |\n");
-					for(int i = articles.size()-1; i >= 0 ; i--) {
-						Article article = articles.get(i);
+					for(int i = forPrintArticles.size()-1; i >= 0 ; i--) {
+						Article article = forPrintArticles.get(i);
 						
 						System.out.printf("%4d   |    %10s  |%4s  |%6d  |\n", article.id, article.regDate, article.title, article.hit);
 					}
@@ -166,6 +186,7 @@ public class App {
 		if(index != -1) {
 			return articles.get(index);
 		}
+		
 //     ==v1==		
 //		for(int i = 0; i < articles.size(); i++) {
 //			Article article = articles.get(i);
